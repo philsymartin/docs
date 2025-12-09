@@ -1,0 +1,61 @@
+---
+title: Pre-session diagnostics (iframe POC)
+description: Embed the existing diagnostics organism from the V8 app into Mintlify via an iframe.
+---
+
+The pre-session diagnostics organism already ships inside the `webclients` monorepo (`modules/diagnostics/src/features/preSessionDiagnostics`) and is routed in V8 at `/diagnostics/preSessionDiagnostics` (see `v8/src/generated/routes.tsx`).
+
+## How the embed works
+
+- **Host application:** `yarn nx serve @v8/app` spins up the V8 dev server. That server renders the diagnostics route without any extra scaffolding.
+- **Docs consumer:** this Mintlify page displays the existing feature via an iframe pointed at that route.
+
+## Run it locally
+
+1. **Start the host component (V8 app)**
+
+    ```bash
+    cd /Users/philsy.v/Desktop/projects/webclients
+    yarn nx serve @v8/app             # dev mode, hot reload, http://localhost:4200
+    # or: npx nx serve @v8/app --skip-nx-cache
+    # -> http://localhost:4200/diagnostics/preSessionDiagnostics
+    ```
+
+    > `nx serve` is the dev server (port 4200). If you run `nx run @v8:serve-build --skip-nx-cache`, Nx builds the app and serves it statically via `http-server` on port `3001`. Either is fine—just point the iframe `src` at whichever port you choose.
+
+2. **Preview Mintlify**
+
+    ```bash
+    cd /Users/philsy.v/Desktop/projects/docs
+    mint dev
+    # -> http://localhost:3000/modules/pre-session-diagnostics
+    ```
+
+3. Open the docs URL; the iframe should load the diagnostics workflow from the running V8 server.
+
+If you already have a deployed build (e.g., `https://f305-dev-talview-app/...`), update the `src` below to point at that environment so the docs don’t depend on a local dev server.
+
+## Embedded preview
+
+```mdx
+<iframe
+  src="http://localhost:4200/diagnostics/preSessionDiagnostics"
+  title="Pre-session diagnostics"
+  width="100%"
+  height="800"
+  frameBorder="0"
+  allow="camera; microphone; autoplay; fullscreen"
+  style={{ border: '1px solid var(--mint-border)' }}
+/>
+```
+
+<iframe
+  src="http://localhost:4200/diagnostics/preSessionDiagnostics"
+  title="Pre-session diagnostics"
+  width="100%"
+  height="800"
+  frameBorder="0"
+      allow="camera; microphone; autoplay; fullscreen"
+  style={{ border: '1px solid var(--mint-border)' }}
+/>
+
